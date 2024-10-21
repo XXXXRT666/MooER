@@ -43,6 +43,10 @@ def _enable_musa() -> bool:
     return torch_musa.is_available()
 
 
+def _enable_mps() -> bool:
+    return torch.backends.mps.is_available()
+
+
 def _create_cuda_device() -> torch.device:
     return torch.device("cuda")
 
@@ -50,6 +54,10 @@ def _create_cuda_device() -> torch.device:
 def _create_musa_device() -> torch.device:
     return torch.device("musa")
 
+
+def _create_mps_device() -> torch.device:
+    return torch.device("mps")
+    
 
 def _register_device(priority, checker, creator):
     device_elem = (priority, checker, creator)
@@ -59,6 +67,7 @@ def _register_device(priority, checker, creator):
 
 _register_device(10, _enable_musa, _create_musa_device)
 _register_device(20, _enable_cuda, _create_cuda_device)
+_register_device(20, _enable_mps, _create_mps_device)
 
 
 def get_device() -> torch.device:
